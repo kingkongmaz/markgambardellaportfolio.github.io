@@ -1,5 +1,57 @@
-<!DOCTYPE html>
 <html>
-It Works!
+<style>
+    html {
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        background-color: cyan;
+        color: crimson;
+        font-size: 72px;
+    }
+    
+    .bigtext {
+        font-size: 200px;
+        font-family: "Papyrus", fantasy;
+        color: yellow;
+        overflow: hidden;
+    }
+    
+    .blink {
+        animation-duration: 0.5s;
+        animation-name: blink;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        animation-timing-function: linear;
+    }
+    
+    @keyframes blink {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+        }
+    }
+    
+    h1 {
+        font-family: 'Arizonia', cursive;
+        font-size: 50px;
+    }
+</style>
+<title>trumns websight</title>
+<center>
+    <link href='https://fonts.googleapis.com/css?family=Arizonia' rel='stylesheet' type='text/css'>
+    <marquee behavior="alternate">
+        <h1> helo trumn this is websight</h1>
+    </marquee>
+    <br>
+    <marquee behavior="scroll">i did movie review so i looked ad busby's magikal adventsure</marquee>
+    <br>
+    <marquee behavior="slide">i like it 10/10 starz</marquee>
+    <br>
+    <center>
+        <p class="bigtext blink">THANK YOU FOR BEING YOU &hearts; </p>
+    </center>
+    <audio autoplay loop>
+        <source src="rap.mp3" type="audio/mpeg">
+    </audio>
 
 </html>
