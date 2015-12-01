@@ -1,57 +1,70 @@
-<html>
-<style>
-    html {
-        font-family: "Comic Sans MS", cursive, sans-serif;
-        background-color: cyan;
-        color: crimson;
-        font-size: 72px;
-    }
-    
-    .bigtext {
-        font-size: 200px;
-        font-family: "Papyrus", fantasy;
-        color: yellow;
-        overflow: hidden;
-    }
-    
-    .blink {
-        animation-duration: 0.5s;
-        animation-name: blink;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-        animation-timing-function: linear;
-    }
-    
-    @keyframes blink {
-        from {
-            opacity: 1;
-        }
-        to {
-            opacity: 0;
-        }
-    }
-    
-    h1 {
-        font-family: 'Arizonia', cursive;
-        font-size: 50px;
-    }
-</style>
-<title>marks websight</title>
-<center>
-    <link href='https://fonts.googleapis.com/css?family=Arizonia' rel='stylesheet' type='text/css'>
-    <marquee behavior="alternate">
-        <h1> helo this is my portfolio</h1>
-    </marquee>
-    <br>
-    <marquee behavior="scroll">i maded a website and its cool. it uses internet coding</marquee>
-    <br>
-    <marquee behavior="slide">i like it 10/10 starz</marquee>
-    <br>
-    <center>
-        <p class="bigtext blink">THANK YOU FOR BEING YOU &hearts; </p>
-    </center>
-    <audio autoplay loop>
-        <source src="rap.mp3" type="audio/mpeg">
-    </audio>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>markisprofessional</title>
+    <link href="cdn/core/frontpage/bootstrap.min.css" rel="stylesheet">
+    <link href="cdn/core/frontpage/jumbotron-narrow.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header clearfix">
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" class="active"><a href="#">Home</a></li>
+                    <li role="presentation"><a href="#">Portfolio</a></li>
+                    <li role="presentation"><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <h3 style="float:left;">mark</h3>
+            <h3 class="text-muted" style="float:left;">isprofessional</h3><sub>.com</sub>
+        </div>
+
+        <div class="jumbotron">
+            <h1>Welcome</h1>
+            <p class="lead">My name is Mark and I fly drones and make websites</p>
+            <p><a class="btn btn-lg btn-success" href="#" role="button">Check out my portfolio</a></p>
+        </div>
+        <center>
+            <p class="lead">Here's an overview of what I do</p>
+        </center>
+        <div class="row marketing">
+            <div class="col-lg-6">
+                <h4>HTML</h4>
+                <p>I do a lot of HTML coding in my free time. I make websites for class, for fun, and for generally any purpose</p>
+
+                <h4>CSS</h4>
+                <p>I also know a lot about CSS and how it works. I use a ton of custom CSS in all of my projects that change the way how it looks.</p>
+
+                <h4>JavaScript</h4>
+                <p>I have recently been re-learning JavaScript to make my websites even better. Using it will make my websites the best they can be.</p>
+            </div>
+
+            <div class="col-lg-6">
+                <h4>GitHub</h4>
+                <p>I use GitHub for hosting nearly all of my projects. They are all under different accounts but I am working on bringing them all to one.</p>
+
+                <h4>Computers</h4>
+                <p>I have built many computers and know a lot about how they work. I know some coding languages, and am currently learning C# and Python.</p>
+
+                <h4>About Me</h4>
+                <p>My name is Mark and I like to fly drones and make stuff. I fly drones to take pictures and videos. I make websites to show them off. Pretty simple stuff.</p>
+            </div>
+        </div>
+
+        <footer class="footer">
+
+            <p style="float:left;"> &copy; mark</p>
+            <p class="text-muted" style="float:left;color:#A4A4A4;">isprofessional.com </p>
+        </footer>
+
+    </div>
+    <!-- /container -->
+</body>
 
 </html>
