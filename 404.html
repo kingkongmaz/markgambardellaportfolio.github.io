@@ -27,8 +27,11 @@
 
         <div class="jumbotron">
             <h1>404</h1>
-            <p class="lead">That page does not exist</p>
-            <p><a class="btn btn-lg btn-info" href="#" role="button">Click here for the homepage</a></p>
+            <script>
+                    document.getElementById("loc").innerHTML = window.location.href + "doesn't actually exist.";
+            </script>
+            <p class="lead" id="loc">That page does not exist</p>
+            <p><a class="btn btn-lg btn-info" href="http://markisprofessional.com" role="button">Click here for the homepage</a></p>
         </div>
         <footer class="footer">
 
