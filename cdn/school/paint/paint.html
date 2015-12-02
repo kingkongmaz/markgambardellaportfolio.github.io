@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta name="author" content="Mark Gambardella Jr.">
+	<meta name="description" content="Paint Splatter">
+	<meta name="keywords" content="HTML5,JavaScript">
+
+    <title>Paint Splatter</title>
+	<script type="text/javascript">
+		var canvas;
+		var context;
+		var imaxCircles;
+		var iDelayMS;
+		var iOutput;
+		var startButton;
+		var iGradiantColors
+		var delayMS = 1000;
+		var maxNumCircles = 0;
+		var numCircles = 1;
+		var counter;
+		var sound;
+			
+		function init(){
+			canvas = document.getElementById("myCanvas");
+			context = canvas.getContext("2d");
+			iMaxCircles = document.getElementById("maxCircles");
+			iDelayMS = document.getElementById("delayMS");
+			iOutput = document.getElementById("output");
+			startButton = document.getElementById("startButton");
+			iGradiantColors = document.getElementById("gradiantColors");
+			iGradiantColors.checked = true;
+			
+			sound = document.createElement('audio');
+			sound.src = 'drip.mp3'
+			
+			startButton.disabled = true;
+			iMaxCircles.readOnly = true;
+			iGradiantColors.disabled = true;
+			
+			iMaxCircles.value = maxNumCircles;
+			iDelayMS.value = delayMS;
+			
+			iOutput.readOnly = true;
+			iDelayMS.readOnly = true;
+			counter = setInterval(draw_Circle, delayMS);
+		}
+
+		function startAgain(){
+			startButton.disabled = true;
+			iMaxCircles.readOnly = true;
+			iDelayMS.readOnly = true;
+			iGradiantColors.disabled = true;
+			
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			numCircles = 1;
+			maxNumCircles = iMaxCircles.value;
+			delayMS = iDelayMS.value;
+			counter = setInterval(draw_Circle, delayMS);
+		}
+
+		function stop(){
+			clearInterval(counter);
+			startButton.disabled = false;
+			iMaxCircles.readOnly = false;
+			iDelayMS.readOnly = false;
+			iGradiantColors.disabled = false;
+		}
+
+		function getRndColor() {
+			var r = 255 * Math.random()|0,
+				g = 255 * Math.random()|0,
+				b = 255 * Math.random()|0;
+			return 'rgb(' + r + ',' + g + ',' + b + ')';
+		}	
+
+		function draw_Circle(){
+				var radius = Math.floor(Math.random() * Math.floor(canvas.width * .03)) + 5;
+				var xAxis = Math.floor(Math.random() * canvas.width) + 1;
+				var yAxis = Math.floor(Math.random() * canvas.height) + 1;
+				var grd;
+				
+				if(xAxis > canvas.width){
+					xAxis = (canvas.width *.95);
+				}else if(xAxis < 0){
+					xAxis = 10;
+				}
+				
+				if(yAxis > canvas.height){
+					yAxis = (canvas.height *.95);
+				}else if(yAxis < 0){
+					yAxis = 10;
+				}
+				
+				context.beginPath();
+
+				if(iGradiantColors.checked == true){
+					grd = context.createRadialGradient(xAxis, yAxis, Math.floor(Math.random() * (radius / 6)) + 1, xAxis, yAxis, radius);
+					grd.addColorStop(0, getRndColor());
+					grd.addColorStop(1, getRndColor());
+					context.fillStyle = grd;
+				}
+				else{
+					context.fillStyle = getRndColor()
+				}
+
+				context.arc(xAxis, yAxis, radius, 0 * Math.PI, 2 * Math.PI);
+				context.fill();
+				
+				context.stroke();
+				output.value = numCircles;
+				
+				if(numCircles >= maxNumCircles && maxNumCircles > 0){
+					clearInterval(counter);
+					alert("Maximun number of circles were created: " + numCircles);
+					startButton.disabled = false;
+					iMaxCircles.readOnly = false;
+					iDelayMS.readOnly = false;
+					iGradiantColors.disabled = false;
+				}
+				else{
+					sound.play();
+				}
+				numCircles++;
+		}
+		
+	</script>
+</head>
+<body onload="init()">
+	<div id="container">
+		<embed id="dripSound" src="drip.mp3" autostart="false" width="0" height="0" id="sound1" enablejavascript="true">    
+		<canvas id="myCanvas" width="600" height="600" style="border:3px solid #c3c3c3;">
+				It appears that your browser does not support HTML5 and the canvas element.
+        </canvas>
+		<br>Number of Paint Splatters Created: <input id="output" type="number" />
+		<input id="startButton" type="button" onclick="startAgain()" value="start"/>
+		<input id="stopButton" type="button" onclick="stop()" value="stop"/>
+		<br>Total Number of Paint Splatters to be Created (Enter Zero for no limit): <input id="maxCircles" type="number" />
+		<br>Number of Millseconds between Paint Splatters: <input id="delayMS" type="number" />
+		<input type="checkbox" id="gradiantColors" value="Yes">Gradiant Colors?
+	</div>
+</body> 
+</html>
