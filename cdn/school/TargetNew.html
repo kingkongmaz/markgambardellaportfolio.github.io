@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta name="author" content="Mark Gambardella Jr.">
+	<meta name="description" content="Target">
+	<meta name="keywords" content="HTML5,JavaScript">
+
+    <title>Target</title>
+	<script type="text/javascript">
+		var canvas;
+		var context;
+		var iOutput;
+		var radius = 60;
+		var xAxis = 255;
+		var yAxis = 255;
+		
+		function init(){
+			canvas = document.getElementById("myCanvas");
+			context = canvas.getContext("2d");
+			canvas.addEventListener('mousemove', onMouseUpdate, false);
+			iOutput = document.getElementById("output");
+			iOutput.readOnly = true;
+			
+			xAxis = canvas.width / 2; //Get X Axis Center Point
+			yAxis = canvas.height / 2; //Get Y Axis Center Point
+			drawObject();
+		}
+
+		function onMouseUpdate(e) {
+			if((e.pageX - this.offsetLeft) < (canvas.width) && (e.pageX - this.offsetLeft) > 0){
+				xAxis = Math.floor(e.pageX - this.offsetLeft);
+			}
+			
+			if((e.pageY - this.offsetTop) < (canvas.height) && (e.pageY - this.offsetTop) > 0){
+				yAxis = Math.floor(e.pageY - this.offsetTop);
+			}
+				drawObject();
+				iOutput.value = "X -" +  xAxis + " Y - " + yAxis;
+		}
+
+		function drawObject(){
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.beginPath();
+			context.arc(xAxis, yAxis, radius, 0 * Math.PI, 2 * Math.PI);
+			context.moveTo(xAxis-60, yAxis);
+			context.lineTo(xAxis+60, yAxis);
+			context.moveTo(xAxis, yAxis-60);
+			context.lineTo(xAxis, yAxis+60);
+			context.strokeStyle = getRndColor();
+			context.stroke();
+		}
+		
+		function getRndColor() {
+			var r = 255 * Math.random()|0,
+				g = 255 * Math.random()|0,
+				b = 255 * Math.random()|0;
+			return 'rgb(' + r + ',' + g + ',' + b + ')';
+		}	
+	</script>
+</head>
+<body onload="init()">
+	<div id="container">
+		<canvas id="myCanvas" width="600" height="600" style="border:3px solid #c3c3c3;">
+				It appears that your browser does not support HTML5 and the canvas element.
+        </canvas>
+		<br>
+		<input id="output" type="text"  size="35"/>
+	</div>
+</body> 
+</html>

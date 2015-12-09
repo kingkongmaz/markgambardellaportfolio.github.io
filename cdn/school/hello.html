@@ -1,0 +1,27 @@
+<html>
+<style>
+html{
+background-color:red;
+
+}
+</style>
+<center>
+<button onclick="startHello();" text="click to say hello">click to say hello</button>
+<script>
+	function startHello(){
+		var times = parseFloat(window.prompt("How many times do you want to say hello?"));
+		getReady(times);
+	}
+	function getReady(x){
+		var addOne = x + 1;
+		writeHello(addOne);
+	}
+	function writeHello(y){
+		for (i = 1; i < y; i++){
+			document.write( "<br> " + i + " Hello World!" + "<br>");
+		}
+	}
+
+	</script>
+	</center>
+	</html>
