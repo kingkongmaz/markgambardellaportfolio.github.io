@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta name="author" content="Mark Gambardella Jr.">
+	<meta name="description" content="Blaster Master">
+	<meta name="keywords" content="HTML5, JavaScript">
+
+    <title>Blaster Master</title>
+	<script type="text/javascript">
+		var canvas;
+		var context;
+		var cheatMode = false;
+		var gameMode = "Stop";
+		var hit;
+		var delayMS = 100;
+		var numHits = 0;
+		var numClicks = 0;
+		var maxNumClicks = 15;
+		var radius = 50;
+		var sound;
+		var iNumHits;
+		var iNumClicks;
+		var iCheatMode;
+		var bStartButton;
+		var counter;
+		var posResponses = [
+						"AAAAAAAA!!!! You Got me!",
+						"Take it easy on me pal!",
+						"Give a guy a chance.",
+						"Ouch, that hurts!!!"
+		]
+		
+		var negResponses = [
+						"You missed me, You missed me now you you gotta kiss me!!! LOL!",
+						"Loser!!",
+						"Are you even trying??!!??",
+						"Nice Job Bozo!",
+						"My grandma can do this with her eyes closed"
+						
+		]
+		var dx = 4;
+		var dy = 4;
+		var y = 0;
+		var x = 0;
+		var color = getRndColor();
+		
+		var circle = {
+			x: x,
+			y: y,
+			r: radius
+		};
+		
+		var rect = {
+			x: 100,
+			y: 100,
+			w: 10,
+			h: 10,
+			visible: false
+		};
+		
+		function init(){
+			canvas = document.getElementById("myCanvas");
+			context = canvas.getContext("2d");
+			
+			//Prevents text from being selected too
+			canvas.addEventListener('selectstart', function(e) { e.preventDefault(); return false; }, false);
+			canvas.addEventListener("mousedown", getPosition, false);
+			sound = document.createElement('audio');
+			
+			rect.x = (canvas.width/2) - (rect.w/2);
+			rect.y = (canvas.height/2) - (rect.h/2);
+			
+			iNumHits = document.getElementById("numHits");
+			iNumClicks = document.getElementById("numClicks");
+			iCheatMode = document.getElementById("cheatMode");
+			bStartButton = document.getElementById("startButton");
+			
+			hit = false;
+			iNumHits.readOnly = true;
+			iNumClicks.readOnly = true;
+			iNumHits.value = numHits;
+			iNumClicks.value = numClicks;
+			iCheatMode.value = cheatMode;
+
+			//createRect(rect.x, rect.y, rect.w, rect.h, "Red");
+		}	
+
+		function draw() {
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			//createRect(rect.x, rect.y, rect.w, rect.h, "Red");
+
+			createCircle(x, y, radius, color);
+			circle.x = x;
+			circle.y = y;
+			circle.radius = radius;
+			
+			if(checkCollision() || hit == true){	
+				dx = dx * -1;
+				dy = dy * -1;
+				
+				hit = false;
+			}else{
+				if (x < 0 || x > canvas.width) {
+					dx = -dx;
+				}
+				
+				if (y < 0 || y > canvas.height) {
+					dy = -dy;
+				}
+
+				if (x == (canvas.width / 2) && y == (canvas.height / 2)) {
+					dx = -dx;
+					dy = -dy;
+				}
+			}
+			x += dx;
+			y += dy;
+		}
+
+		function checkCollision(){
+			if(rect.visible == false){
+				return false;
+			}
+		
+			var distX = Math.abs(circle.x - rect.x - rect.w / 2);
+			var distY = Math.abs(circle.y - rect.y - rect.h / 2);
+
+			if (distX > (rect.w / 2 + circle.r)) {
+				return false;
+			}
+			if (distY > (rect.h / 2 + circle.r)) {
+				return false;
+			}
+
+			if (distX <= (rect.w / 2)) {
+				return true;
+			}
+			if (distY <= (rect.h / 2)) {
+				return true;
+			}
+
+			var dx = distX - rect.w / 2;
+			var dy = distY - rect.h / 2;
+			return (dx * dx + dy * dy <= (circle.r * circle.r));
+		}
+		
+		function getPosition(event)
+		{
+			var xClick = Math.floor(event.x);
+			var yClick = Math.floor(event.y);
+			
+			xClick -= canvas.offsetLeft;
+			yClick -= canvas.offsetTop;
+			numClicks += 1;
+			iNumClicks.value = numClicks;
+
+			if(gameMode == "Stop"){
+				return;
+			}
+			
+			if(maxNumClicks > numClicks){
+			  if (IsInPath(event)){
+				document.getElementById('gameMessage').innerHTML = posResponses[Math.floor(Math.random() * posResponses.length)];
+				clearInterval(counter);
+				sound.src = 'Beep.mp3'
+				sound.play();
+				setTimeout(function(){ sound.pause(); if(sound.currentTime > 0) {sound.currentTime = 0}; }, 500);
+				numHits +=1;
+				iNumHits.value = numHits;
+
+				hit = true;
+				
+				if(numHits < 10) {
+					if(delayMS >= 10){
+						delayMS = (delayMS - 10);
+					}
+					
+					if(radius >= 10 && cheatMode == false){
+						radius = (radius - 5);
+					}
+					
+					circle.x = x;
+					circle.y = y;
+					circle.radius = radius;
+
+					color = getRndColor();
+					counter = setInterval(draw, delayMS);
+				}
+				else{
+						alert("You Win!!!!!!!!");
+						stopGame();
+					}
+			}
+			  else {
+				sound.src = 'BUZZER.MP3'
+				sound.play();
+				setTimeout(function(){ sound.pause(); if(sound.currentTime > 0) {sound.currentTime = 0}; }, 500);
+				document.getElementById('gameMessage').innerHTML = negResponses[Math.floor(Math.random() * negResponses.length)] ;
+			  }
+			}
+			else{
+				alert("You Lose!!!!!!!!");
+				stopGame();
+			}
+		}
+
+		function setCheatMode(){
+			cheatMode = (iCheatMode.checked);
+			rect.w = 25;
+			rect.h = 25;
+		}
+		
+		function startGame(){
+			gameMode = "Start";
+			bStartButton.disabled = true;
+			iCheatMode.disabled = true;
+			x = Math.floor(Math.random() * (canvas.width * .25));
+			y = Math.floor(Math.random() * (canvas.height * .25));
+			hit = false;
+			counter = setInterval(draw, delayMS);
+		}
+
+		function stopGame(){
+			gameMode = "Stop"
+			clearInterval(counter);
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			delayMS = 100;
+			numHits = 0;
+			numClicks = 0;
+			iNumHits.value = numHits;
+			iNumClicks.value = numClicks;
+			iCheatMode.value = cheatMode;
+			radius = 50;
+			bStartButton.disabled = false;
+			iCheatMode.disabled = false;
+			rect.x = (canvas.width/2) - (rect.w/2);
+			rect.y = (canvas.height/2) - (rect.h/2);
+			rect.w = 10;
+			rect.h = 10;
+		}
+
+		function createCircle(xAxis, yAxis, cRadius, cColor) {
+			context.beginPath();
+			context.arc(xAxis, yAxis, cRadius, 0, Math.PI * 2, true);
+			context.fillStyle = cColor;
+			context.closePath();
+			context.fill();
+		}
+
+		function createRect(xAxis, yAxis, rWidth, rHeight, rColor) {
+			context.beginPath();
+			context.rect(xAxis, yAxis, rWidth, rHeight);
+			context.fillStyle = rColor;
+			context.closePath();
+			context.fill();
+			}
+
+		function IsInPath(event) {
+			var bb, x, y;
+			bb = canvas.getBoundingClientRect();
+			x = (event.clientX-bb.left) * (canvas.width/bb.width);
+			y = (event.clientY-bb.top) * (canvas.height/bb.height);
+			return context.isPointInPath(x,y);
+		}
+
+		function getRndColor() {
+			var r = 255 * Math.random()|0,
+				g = 255 * Math.random()|0,
+				b = 255 * Math.random()|0;
+			return 'rgb(' + r + ',' + g + ',' + b + ')';
+		}	
+
+	</script>
+</head>
+<body onload="init()">
+	<div id="container">
+		<embed id="dripSound" src="drip.mp3" autostart="false" width="0" height="0" id="sound1" enablejavascript="true">    
+		<canvas id="myCanvas" width="600" height="600" style="border:3px solid #c3c3c3; background: url('./maxresdefault.jpg');">
+				It appears that your browser does not support HTML5 and the canvas element.
+        </canvas>
+		<br>
+		Number of clicks: <input id="numClicks" type="number" />
+		Number of hits: <input id="numHits" type="number" />
+		<input type="checkbox" id="cheatMode"  onclick="setCheatMode()" value="Yes">Cheat Mode?
+		<br><input id="startButton" type="button" onclick="startGame()" value="start"/>
+		<input id="stopButton" type="button" onclick="stopGame()" value="stop"/>
+		<p>Game Message: <b id='gameMessage'></b></p>
+	</div>
+</body> 
+</html>	
