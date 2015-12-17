@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+<style>
+	#myCanvas {
+	  border:5px solid black;
+	}
+</style>
+
+<div id="container">
+    <canvas id="myCanvas" height="450" width="450">
+	Your browser does not support the HTML5 canvas tag</canvas>
+</div>
+
+<script>
+var can = document.getElementById('myCanvas');
+var ctx = can.getContext('2d');
+
+var direction = "Up";
+var radius = 30;
+ctx.lineWidth = 4;
+
+ctx.clearRect(0,0,can.width, can.height);
+ctx.arc(225, 225, radius, 0, Math.PI * 2, false);
+ctx.fillStyle = get_random_color();
+
+ctx.fill();
+ctx.stroke();
+
+can.addEventListener('mouseover', function(e) {
+	if(radius >= (can.clientWidth/2)-5){
+		direction = "Down";
+	}
+	else if(radius <= 30){
+		direction = "Up";
+	}
+	
+	if(direction == "Up"){
+		radius += 10;
+	}
+	else {
+		radius -= 10;
+	}
+
+    ctx.clearRect(0,0,can.width, can.height);
+    ctx.beginPath();
+	ctx.arc(225, 225, radius, 0, Math.PI * 2, false);
+	
+	ctx.fillStyle = get_random_color();
+	ctx.fill();
+    ctx.stroke();
+}, false);
+
+function get_random_color() {
+    var letters = 'ABCDE'.split('');
+    var color = '#';
+    for (var i = 0; i < 3; i++) {
+        color += letters[Math.floor(Math.random() * letters.length)];
+    }
+    return color;
+}
+
+</script>
+
+</body>
+</html>
